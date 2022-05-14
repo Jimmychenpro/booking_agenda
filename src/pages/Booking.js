@@ -131,7 +131,7 @@ function getOpenHours(){
         <div>
             <h1>Booking</h1>
             <div>
-                <Calendar onChange={setDate} value={date}/>
+                <Calendar onChange={setDate} value={date} minDate={new Date()} />
             </div>
             <div>
                 <p>Heure disponible pour le {day} {formatDate}</p>
