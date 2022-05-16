@@ -2,12 +2,36 @@ import React, {useEffect} from "react";
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import Moment from 'moment';
+import Modal from "../components/Modal";
+import axios from "axios";
 
 const Booking = () => {
     const [date, setDate] = React.useState(new Date());
     const [formatDate, setFormatDate] = React.useState('');
     const [day, setDay] = React.useState('Dimanche');
     const [hour, setHour] = React.useState('00:00');
+    const [json, setJson] = React.useState([]);
+    const [reserved, setReserved] = React.useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/reserved')
+            .then(res => {
+                setReserved(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/calendar')
+            .then(res => {
+                setJson(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, []);
 
     useEffect(() => {
         if(date !== undefined){
@@ -15,7 +39,6 @@ const Booking = () => {
             setFormatDate(Moment(date).format('DD/MM/YYYY'));
         }
     }, [date]);
-
 
     function getDay(){
         switch (date.getDay()){
@@ -36,94 +59,35 @@ const Booking = () => {
         }
     }
 
-    const json =
-    {
-        "Lundi": {
-            "hours": {
-                "1": "08:00",
-                "2": "09:00",
-                "3": "10:00"
-            }
-        },
-        "Mardi": {
-            "hours": {
-                "1": "08:00",
-                "2": "09:00",
-                "3": "10:00",
-                "4": "11:00",
-            }
-        },
-        "Mercredi": {
-            "hours": {
-                "1": "08:00",
-                "2": "09:00",
-                "3": "10:00",
-                "4": "11:00",
-                "5": "12:00"
-            }
-        },
-        "Jeudi": {
-            "hours": {
-                "1": "10:00",
-                "2": "11:00",
-                "3": "12:00",
-            }
-        },
-        "Vendredi": {
-            "hours": {
-                "1": "14:00",
-                "2": "15:00",
-                "3": "16:00",
-            }
-        },
-        "Samedi": {
-            "hours": {
-                "1": "08:00",
-                "2": "09:00",
-                "3": "10:00"
-            }
-        },
-        "Dimanche": {
-            "hours": {
-                "1": "08:00",
-                "2": "09:00",
-                "3": "10:00"
-            }
-        }
-
-    }
-
 function getOpenHours(){
-    const hours = json[day];
-    return Object.keys(hours.hours).map(key => {
+        let button;
+        json.map(days => {
+            if(days.name === day){
+                button = days.hours.map(hours => {
+                        return (
+                            <button key={hours.id} className="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" onClick={() => setHour(hours.name)}>{hours.name}</button>
+                        )
+                });
+            }
+        })
+    if(button && button.length === 0){
         return (
-            <button key={key} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setHour(hours.hours[key])}>{hours.hours[key]}</button>
-            )
-        });
+            <div className="alert alert-danger" role="alert">
+                Aucun horaire disponible pour le {day}
+            </div>
+        )
+    }
+    return button;
     }
 
     function getModal(){
+        const data = {
+            "date": <p>Date : {day} {formatDate}</p>,
+            "hour": <p>Heure : {hour}</p>
+        }
         return (
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Récapitulatif</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <p>Prestataire : ----</p>
-                            <p>Date : {day} {formatDate}</p>
-                            <p>Heure : {hour}</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal data={data} />
         )
     }
 
@@ -138,6 +102,7 @@ function getOpenHours(){
                 {getOpenHours()}
             </div>
             {getModal()}
+
         </div>
     )
 }
