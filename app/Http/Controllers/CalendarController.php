@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Day_has_hours;
 use App\Models\Days;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CalendarController extends Controller
 {
 
-    public function calendar(): \Illuminate\Http\JsonResponse
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        $calendar = Days::with('hours')->get();
+        $calendar = DB::table('days')
+            ->join('day_has_hours', 'days.id', '=', 'day_has_hours.day_id')
+            ->join('hours', 'day_has_hours.hour_id', '=', 'hours.id')
+            ->select('hours.name as time', 'day_has_hours.reserved', 'days.name as day')
+            ->get()
+            ->groupBy('day');
         return response()->json($calendar);
     }
-
-    public function reserved(): \Illuminate\Http\JsonResponse
-    {
-        $reserved = Day_has_hours::where('reserved', '=', '1')->get();
-        return response()->json($reserved);
-    }
-
 }

@@ -19,4 +19,5 @@ class Day_has_hours extends Model
         'reserved'
     ];
 
+
 }

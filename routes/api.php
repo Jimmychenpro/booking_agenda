@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/calendar', [CalendarController::class, 'calendar']);
-Route::get('/reserved', [CalendarController::class, 'reserved']);
+Route::apiResource('/calendar', CalendarController::class);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -16,9 +16,4 @@ class Days extends Model
     protected $fillable = [
         'name'
     ];
-
-    public function Hours()
-    {
-        return $this->belongsToMany('App\Models\Hours', 'day_has_hours', 'day_id', 'hour_id');
-    }
 }
