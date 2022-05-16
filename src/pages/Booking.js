@@ -11,17 +11,6 @@ const Booking = () => {
     const [day, setDay] = React.useState('Dimanche');
     const [hour, setHour] = React.useState('00:00');
     const [json, setJson] = React.useState([]);
-    const [reserved, setReserved] = React.useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/reserved')
-            .then(res => {
-                setReserved(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, []);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/calendar')
@@ -60,18 +49,36 @@ const Booking = () => {
     }
 
 function getOpenHours(){
-        let button;
-        json.map(days => {
-            if(days.name === day){
-                button = days.hours.map(hours => {
-                        return (
-                            <button key={hours.id} className="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" onClick={() => setHour(hours.name)}>{hours.name}</button>
-                        )
-                });
+    let button;
+    Object.keys(json).map(key => {
+        if(key === day){
+            button = json[key].map(item => {
+                if(item.reserved === 0){
+                    return <button
+                                key={item.day + item.time}
+                                className="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                                onClick={() => setHour(item.time)}
+                            >
+                            {item.time}
+                            </button>
+                }else{
+                    return <button
+                                key={item.day + item.time}
+                                className="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                                onClick={() => setHour(item.time)}
+                                disabled
+                            >
+                            {item.time}
+                            </button>
+                    }
+                })
             }
         })
-    if(button && button.length === 0){
+    if(button === undefined){
         return (
             <div className="alert alert-danger" role="alert">
                 Aucun horaire disponible pour le {day}
