@@ -11,11 +11,21 @@ const Booking = () => {
     const [day, setDay] = React.useState('Dimanche');
     const [hour, setHour] = React.useState('00:00');
     const [json, setJson] = React.useState([]);
+    const [reservations, setReservations] = React.useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/calendar')
             .then(res => {
                 setJson(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, []);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/reservations')
+            .then(res => {
+                setReservations(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -50,33 +60,48 @@ const Booking = () => {
 
 function getOpenHours(){
     let button;
+    let hours;
     Object.keys(json).map(key => {
         if(key === day){
             button = json[key].map(item => {
-                if(item.reserved === 0){
-                    return <button
-                                key={item.day + item.time}
-                                className="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                                onClick={() => setHour(item.time)}
-                            >
+                hours = <button
+                    key={item.day + item.time}
+                    className="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                    onClick={() => setHour(item.time)}
+                >
+                    {item.time}
+                </button>
+                reservations.map(reservation => {
+                    if(reservation.date === formatDate && reservation.hour === item.time){
+                        hours = <button
+                            key={item.day + item.time}
+                            className="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            onClick={() => setHour(item.time)}
+                            disabled
+                        >
                             {item.time}
-                            </button>
-                }else{
-                    return <button
-                                key={item.day + item.time}
-                                className="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                                onClick={() => setHour(item.time)}
-                                disabled
-                            >
+                        </button>
+                    }
+                    if(reservation.date === formatDate && reservation.hour !== item.time) {
+                        hours = <button
+                            key={item.day + item.time}
+                            className="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            onClick={() => setHour(item.time)}
+                        >
                             {item.time}
-                            </button>
+                        </button>
                     }
                 })
+                return hours;
+                })
             }
+        return null;
         })
     if(button === undefined){
         return (
@@ -94,7 +119,7 @@ function getOpenHours(){
             "hour": <p>Heure : {hour}</p>
         }
         return (
-            <Modal data={data} />
+            <Modal data={data} date={formatDate} hour={hour}/>
         )
     }
 

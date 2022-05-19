@@ -1,4 +1,5 @@
 import React, {useEffect} from "react";
+import axios from "axios";
 
 function Modal(props){
     const [message, setMessage] = React.useState("");
@@ -10,6 +11,21 @@ function Modal(props){
     }
     function setEmailFromInput(){
         setEmail(document.getElementById("email").value);
+    }
+
+    function reserve(){
+        axios.post('http://localhost:8000/api/reservation/create', {
+            name: name,
+            mail: email,
+            date: props.date,
+            hour: props.hour
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     //simulation function email
@@ -70,7 +86,7 @@ function Modal(props){
                             <input type="email" id="email" onChange={() => setEmailFromInput()}/>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal3">Valider</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => reserve()}>Valider</button>
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                         </div>
                     </div>
