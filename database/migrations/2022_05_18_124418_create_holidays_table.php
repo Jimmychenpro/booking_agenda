@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('day_has_hours', function (Blueprint $table) {
+        Schema::create('holidays', function (Blueprint $table) {
             $table->id();
-            $table->integer('day_id');
-            $table->integer('hour_id');
+            $table->string('date');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('day_has_hours');
+        Schema::dropIfExists('holidays');
     }
 };
