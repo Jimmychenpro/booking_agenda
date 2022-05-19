@@ -12,6 +12,7 @@ const Booking = () => {
     const [hour, setHour] = React.useState('00:00');
     const [json, setJson] = React.useState([]);
     const [reservations, setReservations] = React.useState([]);
+    const [holidays, setHolidays] = React.useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/calendar')
@@ -21,11 +22,16 @@ const Booking = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, []);
-    useEffect(() => {
         axios.get('http://localhost:8000/api/reservations')
             .then(res => {
                 setReservations(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        axios.get('http://localhost:8000/api/holidays')
+            .then(res => {
+                setHolidays(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -61,32 +67,13 @@ const Booking = () => {
 function getOpenHours(){
     let button;
     let hours;
-    Object.keys(json).map(key => {
-        if(key === day){
-            button = json[key].map(item => {
-                hours = <button
-                    key={item.day + item.time}
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                    onClick={() => setHour(item.time)}
-                >
-                    {item.time}
-                </button>
-                reservations.map(reservation => {
-                    if(reservation.date === formatDate && reservation.hour === item.time){
-                        hours = <button
-                            key={item.day + item.time}
-                            className="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onClick={() => setHour(item.time)}
-                            disabled
-                        >
-                            {item.time}
-                        </button>
-                    }
-                    if(reservation.date === formatDate && reservation.hour !== item.time) {
+    holidays.map(holiday => {
+        if(holiday.date === formatDate){
+            return button = <h3 className="text-danger">Désolé, nous sommes fermé</h3>
+        }else{
+            Object.keys(json).map(key => {
+                if(key === day){
+                    button = json[key].map(item => {
                         hours = <button
                             key={item.day + item.time}
                             className="btn btn-primary"
@@ -96,13 +83,27 @@ function getOpenHours(){
                         >
                             {item.time}
                         </button>
-                    }
-                })
-                return hours;
-                })
-            }
-        return null;
-        })
+                        reservations.map(reservation => {
+                            if(reservation.date === formatDate && reservation.hour === item.time){
+                                hours = <button
+                                    key={item.day + item.time}
+                                    className="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"
+                                    onClick={() => setHour(item.time)}
+                                    disabled
+                                >
+                                    {item.time}
+                                </button>
+                            }
+                        })
+                        return hours;
+                    })
+                }
+                return null;
+            })
+        }
+    })
     if(button === undefined){
         return (
             <div className="alert alert-danger" role="alert">
