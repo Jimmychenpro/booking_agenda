@@ -64,25 +64,21 @@ const Booking = () => {
         }
     }
 
-function getOpenHours(){
+    function getOpenHours(){
     let button;
     let hours;
-    holidays.map(holiday => {
-        if(holiday.date === formatDate){
-            return button = <h3 className="text-danger">Désolé, nous sommes fermé</h3>
-        }else{
             Object.keys(json).map(key => {
                 if(key === day){
                     button = json[key].map(item => {
-                        hours = <button
-                            key={item.day + item.time}
-                            className="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onClick={() => setHour(item.time)}
-                        >
-                            {item.time}
-                        </button>
+                            hours = <button
+                                key={item.day + item.time}
+                                className="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                                onClick={() => setHour(item.time)}
+                            >
+                                {item.time}
+                            </button>
                         reservations.map(reservation => {
                             if(reservation.date === formatDate && reservation.hour === item.time){
                                 hours = <button
@@ -97,13 +93,17 @@ function getOpenHours(){
                                 </button>
                             }
                         })
+
                         return hours;
                     })
-                }
+                    holidays.map(holiday => {
+                        if(holiday.date === formatDate){
+                            button = <h3 key={holiday.date} className="text-danger">Désolé, nous sommes fermé</h3>
+                        }
+                    })
+                    }
                 return null;
             })
-        }
-    })
     if(button === undefined){
         return (
             <div className="alert alert-danger" role="alert">
@@ -128,7 +128,7 @@ function getOpenHours(){
         <div>
             <h1>Booking</h1>
             <div>
-                <Calendar onChange={setDate} value={date} minDate={new Date()} />
+                <Calendar onChange={setDate} value={date} minDate={new Date()}/>
             </div>
             <div>
                 <p>Heure disponible pour le {day} {formatDate}</p>
