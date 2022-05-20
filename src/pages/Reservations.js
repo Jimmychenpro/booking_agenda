@@ -148,7 +148,7 @@ function Reservations(){
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary">Close</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" className="btn btn-primary" onClick={() => updateReservation()} data-bs-dismiss="modal">Save changes</button>
                             </div>
                         </div>
@@ -167,7 +167,7 @@ function Reservations(){
                                 <h5>Etes-vous sur de vouloir annuler la réservation ?</h5>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary">Close</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" className="btn btn-primary" onClick={() => removeReservation(id)} data-bs-dismiss="modal">Save changes</button>
                             </div>
                         </div>
