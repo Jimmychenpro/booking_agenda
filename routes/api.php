@@ -3,6 +3,7 @@
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\HolidaysController;
 use App\Http\Controllers\HoursController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::post('/holiday/create', [HolidaysController::class,'create']);
 Route::post('/hour/create', [HoursController::class,'addHour']);
 Route::post('/hour/remove', [HoursController::class,'removeHour']);
 Route::post('/hour/update', [HoursController::class,'updateHour']);
+
+Route::post('/sendMail', [MailController::class, 'sendEmail']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
