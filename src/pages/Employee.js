@@ -1,11 +1,23 @@
 import React from "react";
+import EmployeeCard from "../components/employeeCard";
 
 
-const Employee = () => {
+function Employee() {
     return (
-        <div>
-            Empl
-            {/* <Employee name='Julien' /> */}
+        <div className="row">
+            <div className="col">
+                <EmployeeCard name="Melissa"/>
+            </div>
+            <div className="col">
+                <EmployeeCard name="Jeanne"/>
+            </div>
+            <div className="col">
+                <EmployeeCard name="Justine"/>
+            </div>
+            <div className="col">
+                <EmployeeCard name="Milla"/>
+            </div>
+        
         </div>
     );
 }
