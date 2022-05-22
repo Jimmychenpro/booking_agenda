@@ -128,10 +128,10 @@ const Booking = () => {
         <div>
             <h1>Booking</h1>
             <div>
-                <Calendar onChange={setDate} value={date} minDate={new Date()}/>
+                <Calendar onChange={setDate} value={date} minDate={new Date()} showDoubleView={true}/>
             </div>
             <div>
-                <p>Heure disponible pour le {day} {formatDate}</p>
+                <p>Heure disponible pour le {day} {formatDate} </p>
                 {getOpenHours()}
             </div>
             {getModal()}
