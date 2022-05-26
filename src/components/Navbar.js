@@ -21,6 +21,9 @@ function Navbar(){
                     <li className="nav-item">
                         <Link className="nav-link" to="/hours">Heures</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/employees">Employées</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Disponibilities from "./pages/Disponibilities";
 import Hours from "./pages/Hours";
+import Employees from "./pages/Employees";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/holidays" exact element={<Holidays />} />
           <Route path="/disponibilities" exact element={<Disponibilities />} />
           <Route path="/hours" exact element={<Hours />} />
+          <Route path="/employees" exact element={<Employees />} />
         </Routes>
       </BrowserRouter>
   );

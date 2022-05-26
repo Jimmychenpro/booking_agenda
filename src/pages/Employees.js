@@ -1,15 +1,14 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Moment from 'moment';
 
-function Reservations(){
+function Employees(){
+    const [id, setId] = useState('');
     const [json, setJson] = useState([]);
     const [refresh, setRefresh] = useState(false);
-    const [id, setId] = useState(0);
 
-    //call api
+    //api
     useEffect(() => {
-        axios.get('http://localhost:8000/api/reservations')
+        axios.get('http://localhost:8000/api/employees')
             .then(res => {
                 setJson(res.data);
                 setRefresh(false);
@@ -19,15 +18,12 @@ function Reservations(){
             })
     }, [refresh]);
 
-    //reservation crud
-    function updateReservation(){
-        let date = document.getElementById('upDate').value;
-        date = Moment(date).format('DD/MM/YYYY');
-        
-        axios.post('http://localhost:8000/api/reservation/update', {
+    //crud
+    function updateEmployee(){
+        axios.post('http://localhost:8000/api/employees/update', {
             id: document.getElementById('upId').value,
-            date: date,
-            hour: document.getElementById('upHour').value
+            name: document.getElementById('upName').value,
+            desc: document.getElementById('upDesc').value,
         })
             .then(res => {
                 console.log(res);
@@ -37,8 +33,8 @@ function Reservations(){
                 console.log(err);
             })
     }
-    function removeReservation(){
-        axios.post('http://localhost:8000/api/reservation/delete', {
+    function removeEmployee(){
+        axios.post('http://localhost:8000/api/employees/remove', {
             id: id
         })
             .then(res => {
@@ -49,16 +45,11 @@ function Reservations(){
                 console.log(err);
             })
     }
-    function createReservation(){
+    function createEmployee(){
+        axios.post('http://localhost:8000/api/employees/create', {
+            name: document.getElementById('name').value,
+            desc: document.getElementById('desc').value,
 
-        let date = document.getElementById('newDate').value;
-        date = Moment(date).format('DD/MM/YYYY');
-
-        axios.post('http://localhost:8000/api/reservation/create', {
-            name: document.getElementById('newName').value,
-            mail: document.getElementById('newMail').value,
-            date: date,
-            hour: document.getElementById('newHour').value
         })
             .then(res => {
                 console.log(res);
@@ -69,20 +60,17 @@ function Reservations(){
             })
     }
 
-    //table data
+    //data
     function getData(){
         let data;
         data = json.map(item => {
             return(
                 <tr key={item.id}>
                     <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.employee}</td>
-                    <td>{item.date}</td>
-                    <td>{item.hour}</td>
+                    <td>{item.description}</td>
                     <td>
                         <button className="btn btn-warning mx-1" data-bs-toggle="modal" data-bs-target="#updateModal" onClick={() => setId(item.id)}>Modifier</button>
-                        <button className="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setId(item.id)}>Annuler</button>
+                        <button className="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setId(item.id)}>Supprimer</button>
                     </td>
                 </tr>
             )
@@ -100,30 +88,22 @@ function Reservations(){
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="newModalLabel">Créer une réservation</h5>
+                                <h5 className="modal-title" id="newModalLabel">Ajouter une employée</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
                                 <div>
-                                    <label htmlFor="newName">Nom Complet</label>
-                                    <input type="text" id="newName"/>
+                                    <label htmlFor="name">Nom</label>
+                                    <input type="text" id="name"/>
                                 </div>
                                 <div>
-                                    <label htmlFor="newMail">Email</label>
-                                    <input type="email" id="newMail"/>
-                                </div>
-                                <div>
-                                    <label htmlFor="newDate">Date</label>
-                                    <input type="date" id="newDate"/>
-                                </div>
-                                <div>
-                                    <label htmlFor="newHour">Heure</label>
-                                    <input type="time" id="newHour"/>
+                                    <label htmlFor="desc">Description</label>
+                                    <textarea name="desc" id="desc" cols="50" rows="10"></textarea>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary" onClick={() => createReservation()} data-bs-dismiss="modal">Save changes</button>
+                                <button type="button" className="btn btn-primary" onClick={() => createEmployee()} data-bs-dismiss="modal">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -134,23 +114,23 @@ function Reservations(){
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="updateModalLabel">Modifier une réservation</h5>
+                                <h5 className="modal-title" id="updateModalLabel">Modifier une employée</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
                                 <input type="hidden" id="upId" value={id}/>
                                 <div>
-                                    <label htmlFor="upDate">Date</label>
-                                    <input type="date" id="upDate"/>
+                                    <label htmlFor="upName">Nom</label>
+                                    <input type="text" id="upName"/>
                                 </div>
                                 <div>
-                                    <label htmlFor="upHour">Heure</label>
-                                    <input type="time" id="upHour"/>
+                                    <label htmlFor="upDesc">Description</label>
+                                    <textarea name="upDesc" id="upDesc" cols="50" rows="10"></textarea>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary" onClick={() => updateReservation()} data-bs-dismiss="modal">Save changes</button>
+                                <button type="button" className="btn btn-primary" onClick={() => updateEmployee()} data-bs-dismiss="modal">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -161,45 +141,42 @@ function Reservations(){
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="deleteModalLabel">Annuler une réservation</h5>
+                                <h5 className="modal-title" id="deleteModalLabel">Supprimer une employée</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                                <h5>Etes-vous sur de vouloir annuler la réservation ?</h5>
+                                <h5>Etes-vous sur de vouloir supprimer l'employée ?</h5>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary" onClick={() => removeReservation(id)} data-bs-dismiss="modal">Save changes</button>
+                                <button type="button" className="btn btn-primary" onClick={() => removeEmployee(id)} data-bs-dismiss="modal">Save changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </>
         )
-        }
+    }
 
-return(
-    <>
-        <h1>Liste des Réservations</h1>
-        <table className="table table-striped text-center align-middle w-50 mx-auto">
-            <thead>
+    return(
+        <>
+            <h1>Liste des employées</h1>
+            <table className="table table-striped text-center align-middle w-75 mx-auto">
+                <thead>
                 <tr>
                     <th>Nom</th>
-                    <th>Email</th>
-                    <th>Employée</th>
-                    <th>Date</th>
-                    <th>Heure</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-            {getData()}
-            </tbody>
-        </table>
-        {getModals()}
-        <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newModal">Nouvelle réservation</button>
-    </>
-)
+                </thead>
+                <tbody>
+                {getData()}
+                </tbody>
+            </table>
+            {getModals()}
+            <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newModal">Nouvelle employée</button>
+        </>
+    )
 }
 
-export default Reservations;
+export default Employees;
