@@ -44,8 +44,9 @@ class ReservationController extends Controller
             $hour = $request->input('hour');
             $name = $request->input('name');
             $mail = $request->input('mail');
+            $employee = $request->input('employee');
 
-            DB::insert('insert into reservations (name, email, date, hour) values (?, ?, ?, ?)', [$name, $mail, $date, $hour]);
+            DB::insert('insert into reservations (name, email, date, hour, employee) values (?, ?, ?, ?, ?)', [$name, $mail, $date, $hour, $employee]);
 
             return response()->json(['success' => 'Réservation créée'], 200);
         }

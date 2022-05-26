@@ -13,17 +13,23 @@ class sendContact extends Mailable
     public $date;
     public $hour;
     public $name;
+    public $email;
+    public $employee;
+    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($date, $hour, $name)
+    public function __construct($date, $hour, $name, $email, $employee, $subject)
     {
         $this->date = $date;
         $this->hour = $hour;
         $this->name = $name;
+        $this->email = $email;
+        $this->employee = $employee;
+        $this->subject = $subject;
     }
 
     /**
@@ -33,7 +39,7 @@ class sendContact extends Mailable
      */
     public function build()
     {
-        return $this->from('info@booking.be', "Booking")->view('emails.contact')->subject('Rappel de réservation');
+        return $this->from('info@booking.be', "Booking")->view('emails.contact')->subject($this->subject);
 
     }
 }

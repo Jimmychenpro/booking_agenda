@@ -1,8 +1,8 @@
 <div>
-    <h1>Rappel de réservation</h1>
+    <h1>{{ $subject }}</h1>
+    <p>Email: {{ $email }}</p>
     <p>Bonjour {{ $name }},</p>
-    <p>Vous avez réservé pour le {{ $date }} à {{ $hour }}.</p>
-
-
+    <p>Votre rendez-vous avec {{ $employee }} est enregistré,</p>
+    <p>vous avez réservé pour le {{ $date }} à {{ $hour }}.</p>
 </div>
 

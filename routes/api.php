@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\HolidaysController;
 use App\Http\Controllers\HoursController;
 use App\Http\Controllers\MailController;
@@ -23,6 +24,7 @@ Route::apiResource('/calendar', CalendarController::class);
 Route::apiResource('/reservations', ReservationController::class);
 Route::apiResource('/holidays', HolidaysController::class);
 Route::apiResource('/hours', HoursController::class);
+Route::apiResource('/employees', EmployeesController::class);
 
 Route::post('/calendar/add', [CalendarController::class,'addHourToDay']);
 Route::post('/calendar/remove', [CalendarController::class,'removeHourFromDay']);
@@ -40,6 +42,10 @@ Route::post('/hour/remove', [HoursController::class,'removeHour']);
 Route::post('/hour/update', [HoursController::class,'updateHour']);
 
 Route::post('/sendMail', [MailController::class, 'sendEmail']);
+
+Route::post('/employees/create', [EmployeesController::class,'addEmployee']);
+Route::post('/employees/update', [EmployeesController::class,'updateEmployee']);
+Route::post('/employees/remove', [EmployeesController::class,'delete']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
