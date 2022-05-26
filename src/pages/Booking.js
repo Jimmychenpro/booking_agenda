@@ -4,15 +4,26 @@ import 'react-calendar/dist/Calendar.css';
 import Moment from 'moment';
 import Modal from "../components/Modal";
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 
-const Booking = () => {
-    const [date, setDate] = React.useState(new Date());
+function Booking(){
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() + 2);
+
+    const [date, setDate] = React.useState(startDate);
     const [formatDate, setFormatDate] = React.useState('');
     const [day, setDay] = React.useState('Dimanche');
     const [hour, setHour] = React.useState('00:00');
     const [json, setJson] = React.useState([]);
     const [reservations, setReservations] = React.useState([]);
     const [holidays, setHolidays] = React.useState([]);
+    const [refresh, setRefresh] = React.useState(false);
+
+    const refreshData = () => {
+        setRefresh(true);
+    };
+    const location = useLocation();
+    const employee = location.state;
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/calendar')
@@ -36,7 +47,8 @@ const Booking = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, []);
+        setRefresh(false);
+    }, [refresh]);
 
     useEffect(() => {
         if(date !== undefined){
@@ -74,7 +86,7 @@ const Booking = () => {
                                 key={item.day + item.time}
                                 className="btn btn-primary"
                                 data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
+                                data-bs-target="#exampleModal2"
                                 onClick={() => setHour(item.time)}
                             >
                                 {item.time}
@@ -85,7 +97,7 @@ const Booking = () => {
                                     key={item.day + item.time}
                                     className="btn btn-primary"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal"
+                                    data-bs-target="#exampleModal2"
                                     onClick={() => setHour(item.time)}
                                     disabled
                                 >
@@ -120,7 +132,7 @@ const Booking = () => {
             "hour": <p>Heure : {hour}</p>
         }
         return (
-            <Modal data={data} date={formatDate} hour={hour}/>
+            <Modal data={data} date={formatDate} hour={hour} employee={employee} onSend={refreshData}/>
         )
     }
 
@@ -128,7 +140,7 @@ const Booking = () => {
         <div>
             <h1>Booking</h1>
             <div>
-                <Calendar onChange={setDate} value={date} minDate={new Date()} showDoubleView={true}/>
+                <Calendar onChange={setDate} value={date} minDate={startDate} showDoubleView={true} locale="fr-FR"/>
             </div>
             <div>
                 <p>Heure disponible pour le {day} {formatDate} </p>
