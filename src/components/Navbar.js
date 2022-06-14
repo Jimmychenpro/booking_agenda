@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 function Navbar(){
     return(
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4 mx-4">
-                <a className="navbar-brand" href="#">Booking</a>
+            <nav className="navbar navbar-expand-lg cardBg mb-4 mx-4">
+                <a className="navbar-brand textMauve" href="#">Le Choix dans la Date</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -13,13 +13,10 @@ function Navbar(){
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Home</Link>
+                            <Link className="nav-link text-white" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/employee">Employés</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/booking">Réserver</Link>
+                            <Link className="nav-link text-white" to="/booking">Réserver</Link>
                         </li>
                     </ul>
                 </div>

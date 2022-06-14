@@ -84,7 +84,7 @@ function Booking(){
                     button = json[key].map(item => {
                             hours = <button
                                 key={item.day + item.time}
-                                className="btn btn-primary"
+                                className="btn btn-primary mx-1"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal2"
                                 onClick={() => setHour(item.time)}
@@ -95,7 +95,7 @@ function Booking(){
                             if(reservation.date === formatDate && reservation.hour === item.time){
                                 hours = <button
                                     key={item.day + item.time}
-                                    className="btn btn-primary"
+                                    className="btn btn-primary d-none"
                                     data-bs-toggle="modal"
                                     data-bs-target="#exampleModal2"
                                     onClick={() => setHour(item.time)}
@@ -137,14 +137,16 @@ function Booking(){
     }
 
     return (
-        <div>
-            <h1>Booking</h1>
-            <div>
+        <div className="text-center">
+            <h1 className='textMauve my-4'>Le Choix dans la Date</h1>
+            <div className="d-flex justify-content-center my-4">
                 <Calendar onChange={setDate} value={date} minDate={startDate} showDoubleView={true} locale="fr-FR"/>
             </div>
-            <div>
-                <p>Heure disponible pour le {day} {formatDate} </p>
-                {getOpenHours()}
+            <div className="d-flex flex-column justify-content-center">
+                <p className="text-white">Heure disponible pour le {day} {formatDate} </p>
+                <div>
+                    {getOpenHours()}
+                </div>
             </div>
             {getModal()}
 
