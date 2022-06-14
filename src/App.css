@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.imageMH{
+  min-height:10rem;
+}
+
+.borderNeon{
+  border: 0.2rem solid #fff;
+  border-radius: 2rem;
+  box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #bc13fe,
+    0 0 0.8rem #bc13fe,
+    inset 0 0 1.3rem #bc13fe; 
+}
+
+.buttonEmpBG{
+  background-color:#bc13fe !important;
+}
